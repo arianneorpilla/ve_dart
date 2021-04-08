@@ -29,6 +29,14 @@ class Parse {
     if (tokenArray.length == 0)
       throw new Exception("Cannot parse an empty array of tokens.");
 
+    // mecab_dart doesn't output the right length sometimes
+    tokenArray.removeLast();
+    for (TokenNode token in tokenArray) {
+      for (int i = 0; i < 9 - token.features.length; i++) {
+        token.features.add('*');
+      }
+    }
+
     this.tokenArray = tokenArray;
   }
 
