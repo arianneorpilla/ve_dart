@@ -1,6 +1,6 @@
 name: ve_dart
 description: A Dart implementation of Ve. A linguistic framework that's easy to use. No degree required.
-version: 0.1.4
+version: 0.2.0
 homepage: https://github.com/lrorpilla/ve_dart
 
 environment:

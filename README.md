@@ -22,7 +22,7 @@ This package requires use of the <b><a href="https://pub.dev/packages/mecab_dart
 ```yaml
 dependencies:   
    mecab_dart: 0.1.2
-   ve_dart: 0.1.4
+   ve_dart: 0.2.0
 ```
 
 2. **Copy the ipadic dictionary files** in `assets/ipadic` to your own `assets` folder.
@@ -50,12 +50,8 @@ mecabTagger = Mecab();
 await mecabTagger.init("assets/ipadic", true);
 
 // Make a List<TokenNode> that can be passed to the constructor of Parse.
-List<dynamic> parsed = mecabTagger.parse("今未練なんかこれっぽっちも無い");
-List<TokenNode> tokens = parsed.map((n) => n as TokenNode).toList();
-Parse parse = Parse(tokens);
+List<Word> words = parseVe(mecabTagger, "今未練なんかこれっぽっちも無い");
 
-// Make the output list.
-List<Word> words = parse.words();
 List<String> output = [];
 for (var word in words) {
   output.add(word.toString());
