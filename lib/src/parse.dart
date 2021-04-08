@@ -124,10 +124,10 @@ class Parse {
                   }
                   break;
                 case JODOUSHIGOKAN:
-                  if (following.features[CTYPE].equals(TOKUSHU_DA)) {
+                  if (following.features[CTYPE] == TOKUSHU_DA) {
                     pos = Pos.Verb;
                     grammar = Grammar.Auxiliary;
-                    if (following.features[CFORM].equals(TAIGENSETSUZOKU))
+                    if (following.features[CFORM] == TAIGENSETSUZOKU)
                       eat_next = true;
                   } else if (getFeaturesToCheck(following)[POS1] == JOSHI &&
                       getFeaturesToCheck(following)[POS3] == FUKUSHIKA) {
@@ -137,8 +137,8 @@ class Parse {
                   break;
                 case KEIYOUDOUSHIGOKAN:
                   pos = Pos.Adjective;
-                  if (following.features[CTYPE].equals(TOKUSHU_DA) &&
-                          following.features[CTYPE].equals(TAIGENSETSUZOKU) ||
+                  if (following.features[CTYPE] == TOKUSHU_DA &&
+                          following.features[CTYPE] == TAIGENSETSUZOKU ||
                       getFeaturesToCheck(following)[POS2] == RENTAIKA)
                     eat_next = true;
                   break;
@@ -200,11 +200,11 @@ class Parse {
               !(getFeaturesToCheck(previous)[POS2] == KAKARIJOSHI) &&
                   qualifyingList1.contains(current.features[CTYPE]))
             attach_to_previous = true;
-          else if (current.features[CTYPE].equals(FUHENKAGATA) &&
-              current.features[BASIC].equals(NN))
+          else if (current.features[CTYPE] == FUHENKAGATA &&
+              current.features[BASIC] == NN)
             attach_to_previous = true;
-          else if (current.features[CTYPE].equals(TOKUSHU_DA) ||
-              current.features[CTYPE].equals(TOKUSHU_DESU) &&
+          else if (current.features[CTYPE] == TOKUSHU_DA ||
+              current.features[CTYPE] == TOKUSHU_DESU &&
                   !(current.surface == NA)) pos = Pos.Verb;
           break;
         case DOUSHI:
@@ -215,7 +215,7 @@ class Parse {
               attach_to_previous = true;
               break;
             case HIJIRITSU:
-              if (!current.features[CFORM].equals(MEIREI_I))
+              if (!current.features[CFORM] == MEIREI_I)
                 attach_to_previous = true;
               break;
             default:
