@@ -67,7 +67,10 @@ class Parse {
         case MEISHI:
 //                case MICHIGO:
           pos = Pos.Noun;
-          if (currentPOSArray[POS2] == NO_DATA) break;
+          if (currentPOSArray[POS2] == NO_DATA) {
+            break;
+          }
+
           switch (currentPOSArray[POS2]) {
             case KOYUUMEISHI:
               pos = Pos.ProperNoun;
@@ -80,9 +83,13 @@ class Parse {
             case KEIYOUDOUSHIGOKAN:
             case NAIKEIYOUSHIGOKAN:
               // Refers to line 213 of Ve.
-              if (currentPOSArray[POS3] == NO_DATA) break;
-              if (i == tokenArray.length - 1)
+              if (currentPOSArray[POS3] == NO_DATA) {
+                break;
+              }
+              if (i == tokenArray.length - 1) {
                 break; // protects against array overshooting.
+              }
+
               following = tokenArray[i + 1];
               switch (following.features[CTYPE]) {
                 case SAHEN_SURU:
@@ -102,17 +109,20 @@ class Parse {
                   break;
                 default:
                   if (getFeaturesToCheck(following)[POS2] == JOSHI &&
-                      following.surface == NI) pos = Pos.Adverb;
-                  break;
+                      following.surface == NI) {
+                    pos = Pos.Adverb;
+                  }
               }
-
               break;
             case HIJIRITSU:
             case TOKUSHU:
               // Refers to line 233 of Ve.
-              if (currentPOSArray[POS3] == NO_DATA) break;
-              if (i == tokenArray.length - 1)
-                break; // protects against array overshooting.
+              if (currentPOSArray[POS3] == NO_DATA) {
+                break;
+              }
+              if (i == tokenArray.length - 1) {
+                break;
+              }
               following = tokenArray[i + 1];
 
               switch (currentPOSArray[POS3]) {
@@ -127,8 +137,9 @@ class Parse {
                   if (following.features[CTYPE] == TOKUSHU_DA) {
                     pos = Pos.Verb;
                     grammar = Grammar.Auxiliary;
-                    if (following.features[CFORM] == TAIGENSETSUZOKU)
+                    if (following.features[CFORM] == TAIGENSETSUZOKU) {
                       eatNext = true;
+                    }
                   } else if (getFeaturesToCheck(following)[POS1] == JOSHI &&
                       getFeaturesToCheck(following)[POS3] == FUKUSHIKA) {
                     pos = Pos.Adverb;
@@ -139,8 +150,9 @@ class Parse {
                   pos = Pos.Adjective;
                   if (following.features[CTYPE] == TOKUSHU_DA &&
                           following.features[CTYPE] == TAIGENSETSUZOKU ||
-                      getFeaturesToCheck(following)[POS2] == RENTAIKA)
+                      getFeaturesToCheck(following)[POS2] == RENTAIKA) {
                     eatNext = true;
+                  }
                   break;
                 default:
                   break;
@@ -158,9 +170,9 @@ class Parse {
               break;
             case SETSUBI:
               // Refers to line 267.
-              if (currentPOSArray[POS3] == JINMEI)
+              if (currentPOSArray[POS3] == JINMEI) {
                 pos = Pos.Suffix;
-              else {
+              } else {
                 if (currentPOSArray[POS3] == TOKUSHU &&
                     current.features[BASIC] == SA) {
                   updatePos = true;
@@ -215,7 +227,9 @@ class Parse {
               attachToPrevious = true;
               break;
             case HIJIRITSU:
-              if (current.features[CFORM] != MEIREI_I) attachToPrevious = true;
+              if (current.features[CFORM] != MEIREI_I) {
+                attachToPrevious = true;
+              }
               break;
             default:
               break;
@@ -230,7 +244,9 @@ class Parse {
           const List<String> qualifyingList2 = [TE, DE, BA]; // added NI
           if (currentPOSArray[POS2] == SETSUZOKUJOSHI &&
                   qualifyingList2.contains(current.surface) ||
-              current.surface == NI) attachToPrevious = true;
+              current.surface == NI) {
+            attachToPrevious = true;
+          }
           break;
         case RENTAISHI:
           pos = Pos.Determiner;
@@ -263,10 +279,14 @@ class Parse {
         wordList[finalSlot].appendToReading(getFeatureSafely(current, READING));
         wordList[finalSlot]
             .appendToTranscription(getFeatureSafely(current, PRONUNCIATION));
-        if (alsoAttachToLemma)
+        if (alsoAttachToLemma) {
           wordList[finalSlot]
               .appendToLemma(current.features[BASIC]); // lemma == basic.
-        if (updatePos) wordList[finalSlot].setPartOfSpeech(pos);
+        }
+
+        if (updatePos) {
+          wordList[finalSlot].setPartOfSpeech(pos);
+        }
       } else {
         Word word = new Word(
             getFeatureSafely(current, READING),
@@ -277,16 +297,20 @@ class Parse {
             current.surface,
             current);
         if (eatNext) {
-          if (i == tokenArray.length - 1)
+          if (i == tokenArray.length - 1) {
             throw new Exception(
                 "There's a path that allows array overshooting.");
+          }
+
           following = tokenArray[i + 1];
           word.getTokens().add(following);
           word.appendToWord(following.surface);
           word.appendToReading(getFeatureSafely(following, READING));
           word.appendToTranscription(
               getFeatureSafely(following, PRONUNCIATION));
-          if (eatLemma) word.appendToLemma(following.features[BASIC]);
+          if (eatLemma) {
+            word.appendToLemma(following.features[BASIC]);
+          }
         }
         wordList.add(word);
       }
@@ -297,14 +321,10 @@ class Parse {
   }
 
   String getFeatureSafely(TokenNode token, int feature) {
-    if (feature > PRONUNCIATION)
+    if (feature > PRONUNCIATION) {
       throw new Exception("Asked for a feature out of bounds.");
-    if (feature == READING) {
-      if (token.features.length <= READING) {
-        print("May null");
-        return "*";
-      }
     }
+
     return token.features.length >= feature + 1 ? token.features[feature] : "*";
   }
 
