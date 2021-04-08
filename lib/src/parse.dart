@@ -47,10 +47,10 @@ class Parse {
     TokenNode previous;
     TokenNode following;
 
-    for (int i = 0; i < tokenArray.length - 1; i++) {
+    for (int i = 0; i < tokenArray.length; i++) {
       int finalSlot = wordList.length - 1;
       current = tokenArray[i];
-      Pos pos;
+      Pos pos = null; // could make this TBD instead.
       Grammar grammar = Grammar.Unassigned;
       bool eat_next = false;
       bool eat_lemma = true;
@@ -65,7 +65,7 @@ class Parse {
 
       switch (currentPOSArray[POS1]) {
         case MEISHI:
-          // case MICHIGO:
+//                case MICHIGO:
           pos = Pos.Noun;
           if (currentPOSArray[POS2] == NO_DATA) break;
           switch (currentPOSArray[POS2]) {
@@ -91,7 +91,7 @@ class Parse {
                   break;
                 case TOKUSHU_DA:
                   pos = Pos.Adjective;
-                  if (getFeaturesToCheck(current)[POS2] == TAIGENSETSUZOKU) {
+                  if (getFeaturesToCheck(following)[POS2] == TAIGENSETSUZOKU) {
                     eat_next = true;
                     eat_lemma = false;
                   }
@@ -101,17 +101,8 @@ class Parse {
                   eat_next = true;
                   break;
                 default:
-                  List<String> featuresToCheck = [];
-                  for (int i = POS1; i < POS4 + 1; i++) {
-                    featuresToCheck.add(current.features[i].toString());
-                  }
-
-                  if ((featuresToCheck[POS1] == JOSHI) &&
-                      (following.surface == NI)) {
-                    pos = Pos.Adverb;
-                    // Ve script redundantly (I think) also has eat_next = false here.
-                  }
-
+                  if (getFeaturesToCheck(following)[POS2] == JOSHI &&
+                      following.surface == NI) pos = Pos.Adverb;
                   break;
               }
 
@@ -126,30 +117,29 @@ class Parse {
 
               switch (currentPOSArray[POS3]) {
                 case FUKUSHIKANOU:
-                  if ((getFeaturesToCheck(current)[POS1] == JOSHI) &&
+                  if (getFeaturesToCheck(following)[POS1] == JOSHI &&
                       following.surface == NI) {
                     pos = Pos.Adverb;
-                    eat_next =
-                        false; // Changed this to false because 'case JOSHI' has 'attach_to_previous = true'.
+                    eat_next = false;
                   }
                   break;
                 case JODOUSHIGOKAN:
-                  if (following.features[CTYPE] == TOKUSHU_DA) {
+                  if (following.features[CTYPE].equals(TOKUSHU_DA)) {
                     pos = Pos.Verb;
                     grammar = Grammar.Auxiliary;
-                    if (following.features[CFORM] == TAIGENSETSUZOKU)
+                    if (following.features[CFORM].equals(TAIGENSETSUZOKU))
                       eat_next = true;
-                  } else if (getFeaturesToCheck(current)[POS1] == JOSHI &&
-                      getFeaturesToCheck(current)[POS3] == FUKUSHIKA) {
+                  } else if (getFeaturesToCheck(following)[POS1] == JOSHI &&
+                      getFeaturesToCheck(following)[POS3] == FUKUSHIKA) {
                     pos = Pos.Adverb;
                     eat_next = true;
                   }
                   break;
                 case KEIYOUDOUSHIGOKAN:
                   pos = Pos.Adjective;
-                  if (following.features[CTYPE] == TOKUSHU_DA &&
-                          following.features[CTYPE] == TAIGENSETSUZOKU ||
-                      getFeaturesToCheck(current)[POS2] == RENTAIKA)
+                  if (following.features[CTYPE].equals(TOKUSHU_DA) &&
+                          following.features[CTYPE].equals(TAIGENSETSUZOKU) ||
+                      getFeaturesToCheck(following)[POS2] == RENTAIKA)
                     eat_next = true;
                   break;
                 default:
@@ -199,7 +189,7 @@ class Parse {
         case JODOUSHI:
           // Refers to line 290.
           pos = Pos.Postposition;
-          final List<String> qualifyingList1 = [
+          const List<String> qualifyingList1 = [
             TOKUSHU_TA,
             TOKUSHU_NAI,
             TOKUSHU_TAI,
@@ -210,11 +200,11 @@ class Parse {
               !(getFeaturesToCheck(previous)[POS2] == KAKARIJOSHI) &&
                   qualifyingList1.contains(current.features[CTYPE]))
             attach_to_previous = true;
-          else if (current.features[CTYPE] == FUHENKAGATA &&
-              current.features[BASIC] == NN)
+          else if (current.features[CTYPE].equals(FUHENKAGATA) &&
+              current.features[BASIC].equals(NN))
             attach_to_previous = true;
-          else if (current.features[CTYPE] == TOKUSHU_DA ||
-              current.features[CTYPE] == TOKUSHU_DESU &&
+          else if (current.features[CTYPE].equals(TOKUSHU_DA) ||
+              current.features[CTYPE].equals(TOKUSHU_DESU) &&
                   !(current.surface == NA)) pos = Pos.Verb;
           break;
         case DOUSHI:
@@ -225,7 +215,7 @@ class Parse {
               attach_to_previous = true;
               break;
             case HIJIRITSU:
-              if (!(current.features[CFORM].toString() == MEIREI_I))
+              if (!current.features[CFORM].equals(MEIREI_I))
                 attach_to_previous = true;
               break;
             default:
@@ -238,7 +228,7 @@ class Parse {
         case JOSHI:
           // Refers to line 309.
           pos = Pos.Postposition;
-          final List<String> qualifyingList2 = [TE, DE, BA]; // added NI
+          const List<String> qualifyingList2 = [TE, DE, BA]; // added NI
           if (currentPOSArray[POS2] == SETSUZOKUJOSHI &&
                   qualifyingList2.contains(current.surface) ||
               current.surface == NI) attach_to_previous = true;
@@ -310,12 +300,9 @@ class Parse {
   String getFeatureSafely(TokenNode token, int feature) {
     if (feature > PRONUNCIATION)
       throw new Exception("Asked for a feature out of bounds.");
-    return token.features.length - 1 >= feature + 1
-        ? token.features[feature]
-        : "*";
+    return token.features.length >= feature + 1 ? token.features[feature] : "*";
   }
 
-  // ignore_for_file: non_constant_identifier_names
   // POS1
   static const String MEISHI = "名詞";
   static const String KOYUUMEISHI = "固有名詞";
