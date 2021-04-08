@@ -20,7 +20,7 @@ class Parse {
   static const int CTYPE = 4;
   static const int CFORM = 5;
   static const int BASIC = 6;
-  static const int READING = 7;
+  static const int READING = 42;
   static const int PRONUNCIATION = 8;
 
   List<TokenNode> tokenArray;
