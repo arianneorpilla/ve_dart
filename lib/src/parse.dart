@@ -47,16 +47,16 @@ class Parse {
     TokenNode previous;
     TokenNode following;
 
-    for (int i = 0; i < tokenArray.length; i++) {
+    for (int i = 0; i < tokenArray.length - 1; i++) {
       int finalSlot = wordList.length - 1;
       current = tokenArray[i];
-      Pos pos = null; // could make this TBD instead.
+      Pos pos; // could make this TBD instead.
       Grammar grammar = Grammar.Unassigned;
-      bool eat_next = false;
-      bool eat_lemma = true;
-      bool attach_to_previous = false;
-      bool also_attach_to_lemma = false;
-      bool update_pos = false;
+      bool eatNext = false;
+      bool eatLemma = true;
+      bool attachToPrevious = false;
+      bool alsoAttachToLemma = false;
+      bool updatePos = false;
 
       List<String> currentPOSArray = getFeaturesToCheck(current);
 
@@ -87,18 +87,18 @@ class Parse {
               switch (following.features[CTYPE]) {
                 case SAHEN_SURU:
                   pos = Pos.Verb;
-                  eat_next = true;
+                  eatNext = true;
                   break;
                 case TOKUSHU_DA:
                   pos = Pos.Adjective;
                   if (getFeaturesToCheck(following)[POS2] == TAIGENSETSUZOKU) {
-                    eat_next = true;
-                    eat_lemma = false;
+                    eatNext = true;
+                    eatLemma = false;
                   }
                   break;
                 case TOKUSHU_NAI:
                   pos = Pos.Adjective;
-                  eat_next = true;
+                  eatNext = true;
                   break;
                 default:
                   if (getFeaturesToCheck(following)[POS2] == JOSHI &&
@@ -120,7 +120,7 @@ class Parse {
                   if (getFeaturesToCheck(following)[POS1] == JOSHI &&
                       following.surface == NI) {
                     pos = Pos.Adverb;
-                    eat_next = false;
+                    eatNext = false;
                   }
                   break;
                 case JODOUSHIGOKAN:
@@ -128,11 +128,11 @@ class Parse {
                     pos = Pos.Verb;
                     grammar = Grammar.Auxiliary;
                     if (following.features[CFORM] == TAIGENSETSUZOKU)
-                      eat_next = true;
+                      eatNext = true;
                   } else if (getFeaturesToCheck(following)[POS1] == JOSHI &&
                       getFeaturesToCheck(following)[POS3] == FUKUSHIKA) {
                     pos = Pos.Adverb;
-                    eat_next = true;
+                    eatNext = true;
                   }
                   break;
                 case KEIYOUDOUSHIGOKAN:
@@ -140,7 +140,7 @@ class Parse {
                   if (following.features[CTYPE] == TOKUSHU_DA &&
                           following.features[CTYPE] == TAIGENSETSUZOKU ||
                       getFeaturesToCheck(following)[POS2] == RENTAIKA)
-                    eat_next = true;
+                    eatNext = true;
                   break;
                 default:
                   break;
@@ -152,8 +152,8 @@ class Parse {
               pos = Pos.Number;
               if (wordList.length > 0 &&
                   wordList[finalSlot].getPartOfSpeech() == Pos.Number) {
-                attach_to_previous = true;
-                also_attach_to_lemma = true;
+                attachToPrevious = true;
+                alsoAttachToLemma = true;
               }
               break;
             case SETSUBI:
@@ -163,11 +163,11 @@ class Parse {
               else {
                 if (currentPOSArray[POS3] == TOKUSHU &&
                     current.features[BASIC] == SA) {
-                  update_pos = true;
+                  updatePos = true;
                   pos = Pos.Noun;
                 } else
-                  also_attach_to_lemma = true;
-                attach_to_previous = true;
+                  alsoAttachToLemma = true;
+                attachToPrevious = true;
               }
               break;
             case SETSUZOKUSHITEKI:
@@ -199,10 +199,10 @@ class Parse {
           if (previous == null ||
               !(getFeaturesToCheck(previous)[POS2] == KAKARIJOSHI) &&
                   qualifyingList1.contains(current.features[CTYPE]))
-            attach_to_previous = true;
+            attachToPrevious = true;
           else if (current.features[CTYPE] == FUHENKAGATA &&
               current.features[BASIC] == NN)
-            attach_to_previous = true;
+            attachToPrevious = true;
           else if (current.features[CTYPE] == TOKUSHU_DA ||
               current.features[CTYPE] == TOKUSHU_DESU &&
                   !(current.surface == NA)) pos = Pos.Verb;
@@ -212,11 +212,10 @@ class Parse {
           pos = Pos.Verb;
           switch (currentPOSArray[POS2]) {
             case SETSUBI:
-              attach_to_previous = true;
+              attachToPrevious = true;
               break;
             case HIJIRITSU:
-              if (current.features[CFORM] != MEIREI_I)
-                attach_to_previous = true;
+              if (current.features[CFORM] != MEIREI_I) attachToPrevious = true;
               break;
             default:
               break;
@@ -231,7 +230,7 @@ class Parse {
           const List<String> qualifyingList2 = [TE, DE, BA]; // added NI
           if (currentPOSArray[POS2] == SETSUZOKUJOSHI &&
                   qualifyingList2.contains(current.surface) ||
-              current.surface == NI) attach_to_previous = true;
+              current.surface == NI) attachToPrevious = true;
           break;
         case RENTAISHI:
           pos = Pos.Determiner;
@@ -257,17 +256,17 @@ class Parse {
         // C'est une catastrophe
       }
 
-      if (attach_to_previous && wordList.length > 0) {
+      if (attachToPrevious && wordList.length > 0) {
         // these sometimes try to add to null readings.
         wordList[finalSlot].getTokens().add(current);
         wordList[finalSlot].appendToWord(current.surface);
         wordList[finalSlot].appendToReading(getFeatureSafely(current, READING));
         wordList[finalSlot]
             .appendToTranscription(getFeatureSafely(current, PRONUNCIATION));
-        if (also_attach_to_lemma)
+        if (alsoAttachToLemma)
           wordList[finalSlot]
               .appendToLemma(current.features[BASIC]); // lemma == basic.
-        if (update_pos) wordList[finalSlot].setPartOfSpeech(pos);
+        if (updatePos) wordList[finalSlot].setPartOfSpeech(pos);
       } else {
         Word word = new Word(
             current.features[READING],
@@ -277,7 +276,7 @@ class Parse {
             pos,
             current.surface,
             current);
-        if (eat_next) {
+        if (eatNext) {
           if (i == tokenArray.length - 1)
             throw new Exception(
                 "There's a path that allows array overshooting.");
@@ -287,7 +286,7 @@ class Parse {
           word.appendToReading(following.features[READING]);
           word.appendToTranscription(
               getFeatureSafely(following, PRONUNCIATION));
-          if (eat_lemma) word.appendToLemma(following.features[BASIC]);
+          if (eatLemma) word.appendToLemma(following.features[BASIC]);
         }
         wordList.add(word);
       }
