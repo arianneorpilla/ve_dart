@@ -260,7 +260,8 @@ class Parse {
         // these sometimes try to add to null readings.
         wordList[finalSlot].getTokens().add(current);
         wordList[finalSlot].appendToWord(current.surface);
-        wordList[finalSlot].appendToReading(getFeatureSafely(current, READING));
+        wordList[finalSlot]
+            .appendToReading(getFeatureSafely(current, READING) ?? "");
         wordList[finalSlot]
             .appendToTranscription(getFeatureSafely(current, PRONUNCIATION));
         if (alsoAttachToLemma)
