@@ -215,7 +215,7 @@ class Parse {
               attach_to_previous = true;
               break;
             case HIJIRITSU:
-              if (!current.features[CFORM] == MEIREI_I)
+              if (current.features[CFORM] != MEIREI_I)
                 attach_to_previous = true;
               break;
             default:
