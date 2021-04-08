@@ -20,7 +20,7 @@ class Parse {
   static const int CTYPE = 4;
   static const int CFORM = 5;
   static const int BASIC = 6;
-  static const int READING = 42;
+  static const int READING = 7;
   static const int PRONUNCIATION = 8;
 
   List<TokenNode> tokenArray;
@@ -299,7 +299,9 @@ class Parse {
   String getFeatureSafely(TokenNode token, int feature) {
     if (feature > PRONUNCIATION)
       throw new Exception("Asked for a feature out of bounds.");
-    return token.features.length >= feature + 1 ? token.features[feature] : "*";
+    return token.features.length - 1 >= feature + 1
+        ? token.features[feature]
+        : "*";
   }
 
   // POS1
