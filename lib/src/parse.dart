@@ -269,7 +269,7 @@ class Parse {
         if (updatePos) wordList[finalSlot].setPartOfSpeech(pos);
       } else {
         Word word = new Word(
-            current.features[READING],
+            getFeatureSafely(current, READING),
             getFeatureSafely(current, PRONUNCIATION),
             grammar,
             current.features[BASIC],
@@ -283,7 +283,7 @@ class Parse {
           following = tokenArray[i + 1];
           word.getTokens().add(following);
           word.appendToWord(following.surface);
-          word.appendToReading(following.features[READING]);
+          word.appendToReading(getFeatureSafely(following, READING));
           word.appendToTranscription(
               getFeatureSafely(following, PRONUNCIATION));
           if (eatLemma) word.appendToLemma(following.features[BASIC]);
