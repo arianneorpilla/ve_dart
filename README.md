@@ -38,17 +38,21 @@ When done, you're ready to use the example below.
 
 ## 📖 Example
 ```dart
+// Initialise a mecab_dart tagger.
 mecabTagger = Mecab();
 await mecabTagger.init("assets/ipadic", true);
 
+// Make a List<TokenNode> that can be passed to the constructor of Parse.
 List<dynamic> parsed = mecabTagger.parse("今未練なんかこれっぽっちも無い");
 List<TokenNode> tokens = parsed.map((n) => n as TokenNode).toList();
-
 Parse parse = Parse(tokens);
-List<String> words = [];
-for (var word in parse.words()) {
-  words.add(word.toString());
+
+// Make the output list.
+List<Word> words = parse.words();
+List<String> output = [];
+for (var word in words) {
+  output.add(word.toString());
 }
 
-print(words); // [今, 未練, なんか, これ, っぽっ, ち, も, 無い]
+print(output); // ["今", "未練", "なんか", "これ", "っぽっ", "ち", "も", "無い"]
 ```
