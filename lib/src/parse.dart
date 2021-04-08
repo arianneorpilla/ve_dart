@@ -10,8 +10,7 @@
 import 'package:mecab_dart/mecab_dart.dart';
 import 'package:ve_dart/ve_dart.dart';
 
-List<Word> parseVe(String text) {
-  Mecab tagger = Mecab();
+List<Word> parseVe(Mecab tagger, String text) {
   List<dynamic> dynamicTokens = tagger.parse(text);
   List<TokenNode> tokens = dynamicTokens.map((n) => n as TokenNode).toList();
 
