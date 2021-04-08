@@ -260,8 +260,7 @@ class Parse {
         // these sometimes try to add to null readings.
         wordList[finalSlot].getTokens().add(current);
         wordList[finalSlot].appendToWord(current.surface);
-        wordList[finalSlot]
-            .appendToReading(getFeatureSafely(current, READING) ?? "");
+        wordList[finalSlot].appendToReading(getFeatureSafely(current, READING));
         wordList[finalSlot]
             .appendToTranscription(getFeatureSafely(current, PRONUNCIATION));
         if (alsoAttachToLemma)
@@ -270,7 +269,7 @@ class Parse {
         if (updatePos) wordList[finalSlot].setPartOfSpeech(pos);
       } else {
         Word word = new Word(
-            getFeatureSafely(current, READING) ?? "",
+            getFeatureSafely(current, READING),
             getFeatureSafely(current, PRONUNCIATION),
             grammar,
             current.features[BASIC],
@@ -284,7 +283,7 @@ class Parse {
           following = tokenArray[i + 1];
           word.getTokens().add(following);
           word.appendToWord(following.surface);
-          word.appendToReading(getFeatureSafely(following, READING) ?? "");
+          word.appendToReading(getFeatureSafely(following, READING));
           word.appendToTranscription(
               getFeatureSafely(following, PRONUNCIATION));
           if (eatLemma) word.appendToLemma(following.features[BASIC]);
@@ -300,6 +299,12 @@ class Parse {
   String getFeatureSafely(TokenNode token, int feature) {
     if (feature > PRONUNCIATION)
       throw new Exception("Asked for a feature out of bounds.");
+    if (feature == READING) {
+      if (token.features.length <= READING) {
+        print("May null");
+        return "*";
+      }
+    }
     return token.features.length >= feature + 1 ? token.features[feature] : "*";
   }
 
