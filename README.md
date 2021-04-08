@@ -49,7 +49,7 @@ When done, you're ready to use the example below.
 mecabTagger = Mecab();
 await mecabTagger.init("assets/ipadic", true);
 
-// Make a List<TokenNode> that can be passed to the constructor of Parse.
+// Use parseVe with the initialised tagger and your unparsed term
 List<Word> words = parseVe(mecabTagger, "今未練なんかこれっぽっちも無い");
 
 List<String> output = [];
