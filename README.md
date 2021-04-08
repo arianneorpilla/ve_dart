@@ -22,7 +22,7 @@ This package requires use of the <b><a href="https://pub.dev/packages/mecab_dart
 ```yaml
 dependencies:   
    mecab_dart: 0.1.2
-   ve_dart: 0.1.0
+   ve_dart: 0.1.3
 ```
 
 2. **Copy the ipadic dictionary files** in `assets/ipadic` to your own `assets` folder.

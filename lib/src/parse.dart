@@ -25,7 +25,7 @@ class Parse {
 
   List<TokenNode> tokenArray;
 
-  Parse.tokens(List<TokenNode> tokenArray) {
+  Parse(List<TokenNode> tokenArray) {
     if (tokenArray.length == 0)
       throw new Exception("Cannot parse an empty array of tokens.");
 
