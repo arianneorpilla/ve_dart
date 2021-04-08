@@ -1,5 +1,6 @@
 ## 0.2 - April 8, 2021.
 * 0.2.0 - Fix problems with not enough features in tokens, new ParseVe method
+* 0.2.1 - Fix problem with last element
 
 ## 0.1 - April 8, 2021.
 * Initial release.
