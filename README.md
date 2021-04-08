@@ -1,9 +1,12 @@
 # ve_dart
 
-<p align="left">
-  <img src="https://i.postimg.cc/YCVj78ny/image.png" alt="picture" height=200>
-  <img src="https://i.postimg.cc/SNbxgJXH/image.png" alt="picture" height=200>
-</p>
+```dart
+"離さないって決めたから" => ["離さない", "って", "決めた", "から"]
+"そぞろに鼻を利かせては" => ["そぞろに", "鼻", "を", "利かせて", "は"]
+"無作為に伸びてる雑草も" => ["無", "作為に", "伸びてる", "雑草", "も"]
+"守りたいって言ったのさ" => ["守りたい", "って", "言った", "の", "さ"]
+"何が起きようと変わらないままで" => ["何", "が", "起きよ", "う", "と", "変わらない", "まま", "で"]
+```
 
 **A Dart implementation of Ve.** A linguistic framework that's easy to use. No degree required. 
 
