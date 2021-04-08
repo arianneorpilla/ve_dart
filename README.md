@@ -34,6 +34,13 @@ flutter:
   assets:
     - assets/ipadic/
 ```
+
+4. **Add the following imports** to your code.
+```dart
+import 'package:mecab_dart/mecab_dart.dart';
+import 'package:ve_dart/ve_dart.dart';
+```
+
 When done, you're ready to use the example below.
 
 ## 📖 Example
