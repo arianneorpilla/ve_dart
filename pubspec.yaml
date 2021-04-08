@@ -1,0 +1,22 @@
+name: ve_dart
+description: A Dart implementation of Ve. A linguistic framework that's easy to use. No degree required.
+version: 0.1.0
+author: Leo Rafael Orpilla
+homepage: github.com/lrorpilla
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0"
+  
+dependencies:
+  flutter:
+    sdk: flutter
+  mecab_dart: 0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/ipadic/
