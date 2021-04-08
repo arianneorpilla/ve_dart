@@ -8,7 +8,7 @@
 "何が起きようと変わらないままで" => ["何", "が", "起きよ", "う", "と", "変わらない", "まま", "で"]
 ```
 
-**A Dart implementation of Ve.** A linguistic framework that's easy to use. No degree required. 
+<b>A Dart implementation of <a href="https://github.com/Kimtaro/ve">Ve</a>.</b> A linguistic framework that's easy to use. No degree required. 
 
 * **Segments Japanese morphemes to words** via the <b><a href="https://pub.dev/packages/mecab_dart">mecab_dart</b></a> package
 * Based on the <a href="https://github.com/Kimtaro/ve/tree/master/java">Java port</a> of <b><a href="https://github.com/shirakaba/">Jamie Birch</a></b>, original <a href="https://github.com/Kimtaro/ve">Ruby implementation</a> by <b><a href="https://github.com/Kimtaro/">Kim Ahlström</b></a>
