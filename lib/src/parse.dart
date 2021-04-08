@@ -25,7 +25,7 @@ class Parse {
 
   List<TokenNode> tokenArray;
 
-  Parse(List<TokenNode> tokenArray) {
+  Parse.tokens(List<TokenNode> tokenArray) {
     if (tokenArray.length == 0)
       throw new Exception("Cannot parse an empty array of tokens.");
 
@@ -310,7 +310,9 @@ class Parse {
   String getFeatureSafely(TokenNode token, int feature) {
     if (feature > PRONUNCIATION)
       throw new Exception("Asked for a feature out of bounds.");
-    return token.features.length >= feature + 1 ? token.features[feature] : "*";
+    return token.features.length - 1 >= feature + 1
+        ? token.features[feature]
+        : "*";
   }
 
   // ignore_for_file: non_constant_identifier_names
