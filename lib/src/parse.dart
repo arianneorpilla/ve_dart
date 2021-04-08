@@ -14,8 +14,6 @@ List<Word> parseVe(Mecab tagger, String text) {
   List<dynamic> dynamicTokens = tagger.parse(text);
   List<TokenNode> tokens = dynamicTokens.map((n) => n as TokenNode).toList();
 
-  // the EOS token does not have proper length so we remove it
-  tokens.removeLast();
   // Sometimes mecab_dart doesn't print the appropriate length so we
   // generate dummy values for all tokens short of the right length
   for (TokenNode token in tokens) {
