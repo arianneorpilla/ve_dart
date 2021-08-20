@@ -13,7 +13,7 @@ dependencies:
   mecab_dart:
     git:
       url: https://github.com/lrorpilla/mecab_dart
-      ref: a822b1ac54ce1fbde33ca7d445c1bfd7dd51ae7c
+      ref: f5b0b6d1d00a72cf28409ebe8e637d6802bad1ac
 
 dev_dependencies:
   flutter_test:
