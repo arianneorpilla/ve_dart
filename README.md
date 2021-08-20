@@ -25,7 +25,7 @@ dependencies:
    ve_dart: 0.2.1
 ```
 
-2. **Copy the ipadic dictionary files** in `assets/ipadic` to your own `assets` folder.
+2. **Copy the ipadic dictionary files** in the `mecab_dart` example's `assets/ipadic` to your own `assets` folder.
 
 3. **Append the following** to the `assets` section of your `pubspec.yaml` file 
 
