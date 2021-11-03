@@ -39,7 +39,7 @@ class Parse {
   static const int READING = 7;
   static const int PRONUNCIATION = 8;
 
-  List<TokenNode> tokenArray;
+  List<TokenNode> tokenArray = [];
 
   Parse(List<TokenNode> tokenArray) {
     if (tokenArray.length == 0)
@@ -59,9 +59,9 @@ class Parse {
 
   List<Word> words() {
     List<Word> wordList = [];
-    TokenNode current;
-    TokenNode previous;
-    TokenNode following;
+    TokenNode? current;
+    TokenNode? previous;
+    TokenNode? following;
 
     for (int i = 0; i < tokenArray.length - 1; i++) {
       int finalSlot = wordList.length - 1;
