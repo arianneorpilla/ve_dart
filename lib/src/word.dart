@@ -11,26 +11,27 @@ import 'package:ve_dart/ve_dart.dart';
 import 'package:mecab_dart/mecab_dart.dart';
 
 class Word {
-  String reading;
-  String transcription;
-  Grammar grammar;
+  String? reading;
+  String? transcription;
+  Grammar? grammar;
   //String readingScript;
   //String transcriptionScript;
-  String lemma;
-  Pos partOfSpeech;
+  String? lemma;
+  Pos? partOfSpeech;
   List<TokenNode> tokens = [];
-  String word;
+  String? word;
 
   Word(
-      String read,
-      String pronunciation,
-      Grammar grammar,
-      // String readingScript,
-      // String transcriptionScript,
-      String basic,
-      Pos partOfSpeech,
-      String nodeStr,
-      TokenNode token) {
+    String read,
+    String pronunciation,
+    Grammar grammar,
+    // String readingScript,
+    // String transcriptionScript,
+    String basic,
+    Pos partOfSpeech,
+    String nodeStr,
+    TokenNode token,
+  ) {
     this.reading = read;
     this.transcription = pronunciation;
     this.grammar = grammar;
@@ -46,11 +47,11 @@ class Word {
     this.partOfSpeech = partOfSpeech;
   }
 
-  String getLemma() {
+  String? getLemma() {
     return lemma;
   }
 
-  Pos getPartOfSpeech() {
+  Pos? getPartOfSpeech() {
     return partOfSpeech;
   }
 
@@ -58,40 +59,28 @@ class Word {
     return tokens;
   }
 
-  String getWord() {
+  String? getWord() {
     return word;
   }
 
   void appendToWord(String suffix) {
-    if (word == null)
-      word = "_" + suffix;
-    else
-      word = word + suffix;
+    word = word ?? "_" + suffix;
   }
 
   void appendToReading(String suffix) {
-    if (reading == null)
-      reading = "_" + suffix;
-    else
-      reading = reading + suffix;
+    reading = reading ?? "_" + suffix;
   }
 
   void appendToTranscription(String suffix) {
-    if (transcription == null)
-      transcription = "_" + suffix;
-    else
-      transcription = transcription + suffix;
+    transcription = transcription ?? "_" + suffix;
   }
 
   void appendToLemma(String suffix) {
-    if (lemma == null)
-      lemma = "_" + suffix;
-    else
-      lemma = lemma + suffix;
+    lemma = lemma ?? "_" + suffix;
   }
 
   @override
   String toString() {
-    return word;
+    return word ?? "";
   }
 }
